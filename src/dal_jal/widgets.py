@@ -3,7 +3,10 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.core.urlresolvers import resolve
+try:
+    from django.urls import resolve
+except ImportError:
+    from django.core.urlresolvers import resolve
 from django.template.loader import render_to_string
 from django.utils import safestring
 from django.utils.translation import ugettext_lazy as _
