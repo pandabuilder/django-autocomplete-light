@@ -84,10 +84,20 @@ class GenericFormTest(test.TestCase):  # noqa
             ),
             attrs={
                 'data-autocomplete-light-function': 'select2',
-                'data-autocomplete-light-url': reverse('select2_gfk'),
+                'data-autocomplete-light-url': reverse('TForm_autocomp_test'),
+                'data-autocomplete-light-language': 'en-US',
                 'id': 'id_test',
             }
         ).render('test', value=self.get_value(relation))
         result = six.text_type(form['test'].as_widget())
+
+        expected += '''
+        <div class="dal-forward-conf" id="dal-forward-conf-for-id_test" '''
+        '''style="display:none">
+        <script type="text/dal-forward-conf">'''
+        '''[{"type": "field", "src": "name"}]</script>
+        </div>
+        '''
+
         self.maxDiff = 10000
         self.assertHTMLEqual(result, expected)
