@@ -10,7 +10,7 @@
 Features
 --------
 
-- Python 2.7, 3.4, Django 1.8+ support,
+- Python 2.7, 3.4, Django 2.0+ support (Django 1.11 (LTS), is supported until django-autocomplete-light-3.2.10),
 - Django (multiple) choice support,
 - Django (multiple) model choice support,
 - Django generic foreign key support (through django-querysetsequence),
@@ -39,10 +39,6 @@ Resources
 - `**Documentation** graciously hosted
   <http://django-autocomplete-light.rtfd.org>`_ by `RTFD
   <http://rtfd.org>`_
-- `Live demo graciously hosted
-  <http://dal-yourlabs.rhcloud.com/>`_ by `RedHat
-  <http://openshift.com>`_, thanks to `PythonAnywhere
-  <http://pythonanywhere.com/>`_ for hosting it in the past,
 - `Video demo graciously hosted
   <http://youtu.be/fJIHiqWKUXI>`_ by `Youtube
   <http://youtube.com>`_,

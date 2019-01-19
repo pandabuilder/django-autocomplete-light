@@ -2,6 +2,10 @@ import os
 import sys
 import django
 
+# hack for pytest:
+sys.path.insert(0, os.path.join(
+    os.path.dirname(__file__), '..', '..'))
+
 DEBUG = os.environ.get('DEBUG', False)
 
 if 'DEBUG' not in os.environ:
@@ -64,18 +68,13 @@ INSTALLED_APPS = [
     'select2_generic_foreign_key',
     'select2_many_to_many',
     'select2_one_to_one',
-    'select2_generic_m2m',
-    'select2_taggit',
-    'select2_tagging',
     'select2_outside_admin',
+    'select2_nestedadmin',
     'secure_data',
     'linked_data',
     'rename_forward',
-
-    'jal_foreign_key',
-
-    'gm2m',
-    'select2_gm2m',
+    'forward_different_fields',
+    'custom_select2',
 
     # unit test app
     'tests',
@@ -85,14 +84,27 @@ INSTALLED_APPS = [
     # Enable plugins
     'dal_jal',
     'dal_select2',
+    'queryset_sequence',
     'dal_queryset_sequence',
+    'select2_taggit',
+    'taggit',
+    'nested_admin',
 
     # Project apps
     'django_extensions',
-    'genericm2m',
-    'tagging',
-    'taggit',
 ]
+
+
+if django.VERSION < (2, 0, 0):
+    # pending upstream support for dj 2.0
+    INSTALLED_APPS += [
+        'gm2m',
+        'select2_gm2m',
+        'genericm2m',
+        'select2_generic_m2m',
+        'select2_tagging',
+        'tagging',
+    ]
 
 INSTALLED_APPS = INSTALLED_APPS + ['django.contrib.admin']
 
@@ -120,6 +132,26 @@ MIDDLEWARE_CLASSES += [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+if DEBUG:
+    try:
+        import debug_toolbar
+    except ImportError:
+        pass
+    else:
+        INSTALLED_APPS.append('debug_toolbar')
+        MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+        MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 AUTH_PASSWORD_VALIDATORS = []
 DJANGO_LIVE_TEST_SERVER_ADDRESS="localhost:8000-8010,8080,9200-9300"
@@ -181,5 +213,4 @@ TEMPLATES = [
 
 SELENIUM_PAGE_LOAD_TIMEOUT = 100
 SELENIUM_TIMEOUT = 100
-
-
+INTERNAL_IPS = ('127.0.0.1',)

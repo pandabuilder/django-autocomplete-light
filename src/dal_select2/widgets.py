@@ -8,26 +8,61 @@ from dal.widgets import (
 )
 
 from django import forms
+from django.conf import settings
+try:
+    # SELECT2_TRANSLATIONS is Django 2.x only
+    from django.contrib.admin.widgets import SELECT2_TRANSLATIONS
+except ImportError:
+    SELECT2_TRANSLATIONS = {}
 from django.utils import six
+from django.utils import translation
 
 
 class Select2WidgetMixin(object):
     """Mixin for Select2 widgets."""
 
-    class Media:
-        """Automatically include static files for the admin."""
+    def build_attrs(self, *args, **kwargs):
+        """Set data-autocomplete-light-language."""
+        attrs = super(Select2WidgetMixin, self).build_attrs(*args, **kwargs)
+        lang_code = self._get_language_code()
+        if lang_code:
+            attrs.setdefault('data-autocomplete-light-language', lang_code)
+        return attrs
 
-        css = {
-            'all': (
-                'autocomplete_light/vendor/select2/dist/css/select2.css',
-                'autocomplete_light/select2.css',
-            )
-        }
-        js = (
-            'autocomplete_light/jquery.init.js',
-            'autocomplete_light/autocomplete.init.js',
-            'autocomplete_light/vendor/select2/dist/js/select2.full.js',
-            'autocomplete_light/select2.js',
+    def _get_language_code(self):
+        """Return language code or None."""
+        lang_code = translation.get_language()
+        if lang_code:
+            lang_code = translation.to_locale(lang_code).replace('_', '-')
+        return lang_code
+
+    @property
+    def media(self):
+        """Return JS/CSS resources for the widget."""
+        extra = '' if settings.DEBUG else '.min'
+        i18n_name = SELECT2_TRANSLATIONS.get(translation.get_language())
+        i18n_file = (
+            'admin/js/vendor/select2/i18n/%s.js' % i18n_name,
+        ) if i18n_name else ()
+
+        return forms.Media(
+            js=(
+                'admin/js/vendor/jquery/jquery%s.js' % extra,
+                'autocomplete_light/jquery.init.js',
+                'admin/js/vendor/select2/select2.full%s.js' % extra,
+            ) + i18n_file + (
+                'autocomplete_light/autocomplete.init.js',
+                'autocomplete_light/forward.js',
+                'autocomplete_light/select2.js',
+                'autocomplete_light/jquery.post-setup.js',
+            ),
+            css={
+                'screen': (
+                    'admin/css/vendor/select2/select2%s.css' % extra,
+                    'admin/css/autocomplete.css',
+                    'autocomplete_light/select2.css',
+                ),
+            },
         )
 
     autocomplete_function = 'select2'
