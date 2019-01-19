@@ -49,7 +49,7 @@ class JalWidgetMixin(object):
         module = importlib.import_module(view_func.__module__)
         return getattr(module, view_func.__name__)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         html = '''
         <span id="{id}-wrapper" {attrs}>
             <span id="{id}-deck" class="deck">
