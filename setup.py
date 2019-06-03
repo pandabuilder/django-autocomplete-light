@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name='django-autocomplete-light',
-    version='3.3.2',
+    version='3.3.5',
     description='Fresh autocompletes for Django',
     author='James Pic',
     author_email='jamespic@gmail.com',
@@ -28,7 +28,7 @@ setup(
         'nested': ['django-nested-admin'],
         'tags': ['django-taggit'],
         'genericm2m': ['django-generic-m2m'],
-        'gfk': ['django-querysetsequence>=0.7.1'],
+        'gfk': ['django-querysetsequence>=0.11'],
     },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
