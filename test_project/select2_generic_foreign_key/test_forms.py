@@ -7,9 +7,10 @@ try:
     from django.urls import reverse
 except ImportError:
     from django.core.urlresolvers import reverse
-from django.utils import six
 
 from queryset_sequence import QuerySetSequence
+
+import six
 
 from .forms import TForm
 from .models import TModel, TProxyModel
@@ -92,7 +93,7 @@ class GenericFormTest(test.TestCase):  # noqa
         result = six.text_type(form['test'].as_widget())
 
         expected += '''
-        <div class="dal-forward-conf" id="dal-forward-conf-for-id_test"
+        <div class="dal-forward-conf" id="dal-forward-conf-for_id_test"
         style="display:none">
         <script type="text/dal-forward-conf">
         [{"type": "field", "src": "name"}]</script>

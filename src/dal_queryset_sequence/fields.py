@@ -139,11 +139,12 @@ class QuerySetSequenceModelMultipleField(ContentTypeModelMultipleFieldMixin,
 class GenericForeignKeyModelField(QuerySetSequenceModelField):
     """Field that generate automatically the view for compatible widgets."""
 
-    def __init__(
-        self, *args,
-        model_choice=None, widget=None, view=None, field_id=None, **kwargs
-    ):
+    def __init__(self, *args, **kwargs):
         """Initialize GenericForeignKeyModelField."""
+        model_choice = kwargs.pop('model_choice', None)
+        widget = kwargs.pop('widget', None)
+        view = kwargs.pop('view', None)
+        field_id = kwargs.pop('field_id', None)
         self.field_id = field_id if field_id else id(self)
         if model_choice:
             self.model_choice = model_choice
@@ -159,7 +160,7 @@ class GenericForeignKeyModelField(QuerySetSequenceModelField):
             raise AttributeError(
                 "Class object are required (not instantiated)")
 
-        super().__init__(*args, **kwargs)
+        super(GenericForeignKeyModelField, self).__init__(*args, **kwargs)
 
     def as_url(self, form):
         """Return url."""

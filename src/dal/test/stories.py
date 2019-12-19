@@ -3,11 +3,11 @@ from __future__ import unicode_literals
 
 import time
 
-from django.utils import six
-
 from selenium.common.exceptions import (
     StaleElementReferenceException,
 )
+
+import six
 
 import tenacity
 
